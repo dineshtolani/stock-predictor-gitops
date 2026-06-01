@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: stock-predictor-pipeline
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/dineshtolani/stock-predictor-gitops.git' # 👈 Your real GitHub repo
+    targetRevision: HEAD
+    path: '.' # 👈 Looks at the root folder where deployment.yaml lives
+  destination:
+    server: 'https://kubernetes.default.svc' # 👈 Points straight to your local Minikube cluster
+    namespace: default # 👈 The cluster namespace where your container will run
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
