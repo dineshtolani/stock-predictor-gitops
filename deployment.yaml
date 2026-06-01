@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock-predictor-api
+  labels:
+    app: stock-predictor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stock-predictor
+  template:
+    metadata:
+      labels:
+        app: stock-predictor
+    spec:
+      containers:
+      - name: predictor-container
+        image: dineshtolani/stock-predictor:v1  # 👈 Points to your real Docker Hub image!
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stock-predictor-service
+spec:
+  type: NodePort
+  ports:
+  - port: 8000
+    targetPort: 8000
+    nodePort: 30080
+  selector:
+    app: stock-predictor
